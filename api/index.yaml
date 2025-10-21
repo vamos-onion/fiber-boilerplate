@@ -1,0 +1,35 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Minimal ping API server
+servers:
+  - url: http://localhost:8080/api
+    description: Local Development
+
+tags:
+  - name: ping
+    description: Ping
+  - name: appuser
+    description: Appuser
+
+paths:
+  /ping:
+    $ref: "v1/ping.yaml"
+  /appuser/create:
+    $ref: "v1/create_appuser.yaml"
+  /appuser/list:
+    $ref: "v1/list_appusers.yaml"
+  /appuser/update:
+    $ref: "v1/update_appuser.yaml"
+
+components:
+  securitySchemes:
+    jwtAuth:
+      description: JWT
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    $ref: "./parameters.yaml"
+  schemas:
+    $ref: "./schemas.yaml"

@@ -1,0 +1,12 @@
+get:
+  operationId: GetPing
+  description: ping pong
+  tags:
+    - ping
+  responses:
+    '200':
+      description: pong response
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas.yaml#/Pong'

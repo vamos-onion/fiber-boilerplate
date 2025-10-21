@@ -1,0 +1,112 @@
+# Schemas
+GenericResponse:
+  type: object
+  required:
+    - code
+    - message
+  properties:
+    code:
+      description: HTTP Status 코드
+      type: integer
+    message:
+      description: message
+      type: string
+    data:
+      x-go-type: interface{}
+      anyOf:
+        - type: string
+        - type: object
+
+EntityListResponse:
+  type: object
+  properties:
+    total:
+      description: 총 아이템 수
+      type: integer
+
+EntityResponse:
+  type: object
+  required:
+    - UUID
+  properties:
+    UUID:
+      description: UUID
+      type: string
+    CreatedAt:
+      description: 생성 시간(타임스탬프)
+      type: integer
+      format: int64
+    ModifiedAt:
+      description: 최근 수정 시간(타임스탬프)
+      type: integer
+      format: int64
+
+CreateAppuserRequest:
+  type: object
+  required:
+    - name
+    - birthday
+    - gender
+  properties:
+    name:
+      description: 이름
+      type: string
+    birthday:
+      description: 생년월일
+      type: string
+      format: date
+    gender:
+      description: 성별
+      type: string
+      enum:
+        - M
+        - F
+
+# appuserInfo
+Appuser:
+  allOf:
+    - $ref: "#/EntityResponse"
+    - $ref: "#/AppuserInfo"
+
+AppuserInfo:
+  type: object
+  required:
+    - name
+    - birthday
+    - gender
+    - withdraw
+  properties:
+    name:
+      description: 이름
+      type: string
+    birthday:
+      description: 생년월일
+      type: string
+      format: date
+      pattern: '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
+    gender:
+      description: 성별
+      type: string
+    withdraw:
+      description: 탈퇴 여부
+      type: boolean
+
+AppuserListInfo:
+  allOf:
+    - $ref: "#/EntityListResponse"
+    - type: object
+      properties:
+        appusers:
+          description: 환자 리스트
+          type: array
+          items:
+            $ref: "#/Appuser"
+
+Pong:
+  type: object
+  required:
+    - ping
+  properties:
+    ping:
+      type: string
+      example: pong

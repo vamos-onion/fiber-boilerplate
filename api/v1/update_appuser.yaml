@@ -1,0 +1,26 @@
+put:
+  operationId: UpdateAppuser
+  description: 사용자 정보 수정
+  tags:
+    - appuser
+  security:
+    - jwtAuth: [ ]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas.yaml#/Appuser"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/Appuser"
+    418:
+      description: FAIL
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/GenericResponse"

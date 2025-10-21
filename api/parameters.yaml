@@ -1,0 +1,42 @@
+paginationQueryParam:
+  name: pagination
+  description: 페이징 파라미터
+  in: query
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          limit:
+            description: 페이지 당 출력 수
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          page:
+            description: 페이지
+            type: integer
+            minimum: 1
+            default: 1
+
+sortingQueryParam:
+  name: sorting
+  description: 정렬 파라미터
+  in: query
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          keys:
+            description: string[]
+            type: array
+            items:
+              description: 정렬 키
+              type: string
+          dirs:
+            description: string[]
+            type: array
+            items:
+              description: 정렬 방향(ASC | DESC)
+              type: string

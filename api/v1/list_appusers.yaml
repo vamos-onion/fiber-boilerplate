@@ -1,0 +1,51 @@
+get:
+  operationId: ListAppusers
+  description: example
+  tags:
+    - appuser
+  security:
+    - jwtAuth: [ ]
+  parameters:
+    - name: uuid
+      description: 사용자 uuid
+      example: 12956e54-503d-46f1-8b9b-7cf304fba601
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: name
+      description: 사용자 이름
+      example: 홍길동
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: gender
+      description: 사용자 성별
+      example: M / F
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: withdraw
+      description: 사용자 탈퇴 여부
+      example: true / false
+      in: query
+      required: false
+      schema:
+        type: boolean
+    - $ref: "../parameters.yaml#/sortingQueryParam"
+    - $ref: "../parameters.yaml#/paginationQueryParam"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/AppuserListInfo"
+    418:
+      description: Fail
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/GenericResponse"

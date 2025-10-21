@@ -1,0 +1,26 @@
+post:
+  operationId: CreateAppuser
+  description: example
+  tags:
+    - appuser
+  security:
+    - jwtAuth: [ ]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas.yaml#/CreateAppuserRequest"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/Appuser"
+    418:
+      description: Fail
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/GenericResponse"
