@@ -1,4 +1,7 @@
 # Fiber Boilerplate
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go 1.24.4+](https://img.shields.io/badge/go-1.24.4+-blue)](https://go.dev)
 
 A production-ready Go web service boilerplate built with Fiber framework, featuring OpenAPI-based code generation, PostgreSQL integration, and a clean, modular architecture.
 
