@@ -15,6 +15,10 @@ tags:
 paths:
   /ping:
     $ref: "v1/ping.yaml"
+  /sse/open:
+    $ref: "v1/sseOpen.yaml"
+  /sse/close:
+    $ref: "v1/sseClose.yaml"
   /appuser/create:
     $ref: "v1/create_appuser.yaml"
   /appuser/list:

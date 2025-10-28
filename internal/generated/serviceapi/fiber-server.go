@@ -26,6 +26,12 @@ type ServerInterface interface {
 
 	// (GET /ping)
 	GetPing(c *fiber.Ctx) error
+
+	// (GET /sse/close)
+	SseClose(c *fiber.Ctx) error
+
+	// (GET /sse/open)
+	SseOpen(c *fiber.Ctx) error
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -132,6 +138,18 @@ func (siw *ServerInterfaceWrapper) GetPing(c *fiber.Ctx) error {
 	return siw.Handler.GetPing(c)
 }
 
+// SseClose operation middleware
+func (siw *ServerInterfaceWrapper) SseClose(c *fiber.Ctx) error {
+
+	return siw.Handler.SseClose(c)
+}
+
+// SseOpen operation middleware
+func (siw *ServerInterfaceWrapper) SseOpen(c *fiber.Ctx) error {
+
+	return siw.Handler.SseOpen(c)
+}
+
 // FiberServerOptions provides options for the Fiber server.
 type FiberServerOptions struct {
 	BaseURL     string
@@ -160,5 +178,9 @@ func RegisterHandlersWithOptions(router fiber.Router, si ServerInterface, option
 	router.Put(options.BaseURL+"/appuser/update", wrapper.UpdateAppuser)
 
 	router.Get(options.BaseURL+"/ping", wrapper.GetPing)
+
+	router.Get(options.BaseURL+"/sse/close", wrapper.SseClose)
+
+	router.Get(options.BaseURL+"/sse/open", wrapper.SseOpen)
 
 }

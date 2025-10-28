@@ -24,6 +24,14 @@ func (h APIHandlerBlock) GetPing(ctx *fiber.Ctx) error {
 	return v1.GetPing(ctx)
 }
 
+func (h APIHandlerBlock) SseOpen(ctx *fiber.Ctx) error {
+	return v1.SseOpen(ctx)
+}
+
+func (h APIHandlerBlock) SseClose(ctx *fiber.Ctx) error {
+	return v1.SseClose(ctx)
+}
+
 func (h APIHandlerBlock) ListAppusers(ctx *fiber.Ctx, params api.ListAppusersParams) error {
 	return v1.ListAppusers(ctx, params)
 }
