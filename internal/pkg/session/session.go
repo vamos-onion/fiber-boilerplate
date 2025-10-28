@@ -87,3 +87,8 @@ func Destroy(ctx *fiber.Ctx) error {
 
 	return store.Del(ctx.Context(), key)
 }
+
+// GetStore :
+func GetStore(keyName string) *StoreBlock {
+	return newStore(keyName)
+}

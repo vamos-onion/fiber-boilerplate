@@ -1,0 +1,18 @@
+get:
+  operationId: SseClose
+  description: example
+  tags:
+    - sse
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/GenericResponse"
+    418:
+      description: Fail
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas.yaml#/GenericResponse"

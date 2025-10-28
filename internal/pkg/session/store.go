@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/gob"
+	"errors"
+	"time"
 
 	"fiber-boilerplate/internal/defs"
 	"fiber-boilerplate/internal/pkg/database"
@@ -18,11 +20,17 @@ type StoreBlock struct {
 
 // CloseConnection : Renamed from Close to prevent automatic cleanup by Fiber
 func (s *StoreBlock) CloseConnection() error {
+	if s == nil || s.redis == nil {
+		return defs.ErrInvalid
+	}
 	return s.redis.Close()
 }
 
 // Del :
 func (s *StoreBlock) Del(ctx context.Context, key string) error {
+	if s == nil || s.redis == nil {
+		return defs.ErrInvalid
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -31,6 +39,9 @@ func (s *StoreBlock) Del(ctx context.Context, key string) error {
 
 // Set :
 func (s *StoreBlock) Set(ctx context.Context, key string, data *DataBlock) error {
+	if s == nil || s.redis == nil {
+		return defs.ErrInvalid
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -48,6 +59,9 @@ func (s *StoreBlock) Set(ctx context.Context, key string, data *DataBlock) error
 
 // Get :
 func (s *StoreBlock) Get(ctx context.Context, key string) (*DataBlock, bool, error) {
+	if s == nil || s.redis == nil {
+		return nil, false, defs.ErrInvalid
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -77,10 +91,89 @@ func (s *StoreBlock) Get(ctx context.Context, key string) (*DataBlock, bool, err
 
 // Flush :
 func (s *StoreBlock) Flush(ctx context.Context) error {
+	if s == nil || s.redis == nil {
+		return defs.ErrInvalid
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
 	return s.redis.Flush(ctx)
+}
+
+// Close :
+func (s *StoreBlock) Close() error {
+	if s == nil || s.redis == nil {
+		return defs.ErrInvalid
+	}
+	return s.redis.Close()
+}
+
+// SubscribeChannel :
+func (s *StoreBlock) SubscribeChannel(ctx context.Context, channel string) error {
+	if s == nil || s.redis == nil {
+		return defs.ErrInvalid
+	}
+
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	ctxWTO, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+
+	// Subscriber Goroutine
+	go func() {
+		sub := s.redis.SubscribeChannel(ctx, channel)
+		ch := sub.Channel()
+		defer sub.Close()
+
+		for {
+			select {
+			case <-ctxWTO.Done():
+				// Context canceled or timeout, exit goroutine
+				logging.Trace("Context canceled or timeout, exit goroutine")
+				return
+			case msg := <-ch:
+				if msg == nil {
+					// Channel closed
+					logging.Trace("Channel closed")
+					return
+				}
+				logging.Trace("Received message:", msg.Payload)
+				// 메시지 받으면 종료
+				if len(ch) == 0 {
+					logging.Trace("Received all messages, exit goroutine")
+					// context cancel
+					cancel()
+					return
+				}
+			}
+		}
+	}()
+
+	// Main Goroutine waits
+	select {
+	case <-ctxWTO.Done():
+		// Timeout or cancellation
+		if errors.Is(ctxWTO.Err(), context.DeadlineExceeded) {
+			logging.Trace("Context timeout")
+			return defs.ErrTimeout
+		}
+
+		logging.Trace("Context Done")
+		return nil
+	}
+}
+
+// PublishChannel :
+func (s *StoreBlock) PublishChannel(ctx context.Context, channel string, message string) error {
+	if s == nil || s.redis == nil {
+		return defs.ErrInvalid
+	}
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return s.redis.PublishChannel(ctx, channel, message)
 }
 
 func newStore(keyName string) *StoreBlock {

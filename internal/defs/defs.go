@@ -7,6 +7,10 @@ import (
 	"syscall"
 )
 
+const (
+	KeyStore string = "fiber-boilerplate/#/keyStore"
+)
+
 // errors
 var (
 	ErrBadRequest      = NewError(http.StatusBadRequest)

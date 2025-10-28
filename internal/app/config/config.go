@@ -17,7 +17,7 @@ type ServerBlock struct {
 		Enabled          bool     `env:"CORS_ENABLED" envDefault:"true" json:"enabled,omitempty"`
 		AllowOrigins     []string `env:"CORS_ALLOW_ORIGINS" envSeparator:"," envDefault:"*" json:"allowOrigins,omitempty"`
 		AllowMethods     []string `env:"CORS_ALLOW_METHODS" envSeparator:"," envDefault:"GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS" json:"allowMethods,omitempty"`
-		AllowHeaders     []string `env:"CORS_ALLOW_HEADERS" envSeparator:"," envDefault:"" json:"allowHeaders,omitempty"`
+		AllowHeaders     []string `env:"CORS_ALLOW_HEADERS" envSeparator:"," envDefault:"Cache-Control" json:"allowHeaders,omitempty"`
 		AllowCredentials bool     `env:"CORS_ALLOW_CREDENTIALS" envDefault:"false" json:"allowCredentials,omitempty"`
 		ExposeHeaders    []string `env:"CORS_EXPOSE_HEADERS" envSeparator:"," envDefault:"" json:"exposeHeaders,omitempty"`
 		MaxAge           int      `env:"CORS_MAX_AGE" envSeparator:"," envDefault:"0" json:"maxAge,omitempty"`
